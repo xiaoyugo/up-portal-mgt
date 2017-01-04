@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queryMapping>
+    <!-- 按条件查询用户 -->
+    <query name="system.findChUsers">
+       <hql>
+          <![CDATA[
+            select user from ChUser as user 
+            where 1=1 
+            <#if loginName??>
+	            and user.chUserLogname like:loginName
+	        </#if> 
+	        <#if passWord??>
+	            and user.chUserPassword=:passWord
+	        </#if> 
+	        <#if roleId??>
+	            and user.chUserRoleids like:roleId
+	        </#if>
+	        <#if userName??>
+	            and user.chUsername like:userName  
+	        </#if>
+	         <#if userState??>
+	            and user.chUserState=:userState  
+	        </#if>
+	        <#if userIdList??>
+	             and user.id in (:userIdList) 
+	        </#if>
+	        <#if orderattr??>
+	              order by  ${orderattr}  ${ordertype}
+	        <#else>
+	              order by user.chUserMaketime desc
+	        </#if>
+          ]]>
+       </hql>
+    </query>
+  
+    <!-- 查询角色 -->
+     <query name="system.findRoles">
+       <hql>
+          <![CDATA[
+		       select role from ChRole as role 
+		       where 1=1 
+		       <#--有上级角色-->
+		       <#if _query_existedParentRole??>
+		            and role.chRole.id is not null 
+		       </#if>
+		       <#--由上级角色获得所有的下级角色-->
+		       <#if parentId??>
+		             and role.chRole.id=:parentId 
+		       </#if>
+		       <#--由角色名称查询角色-->
+		       <#if roleName??>
+		             and role.chRoleName like :roleName
+		       </#if>
+		       <#--由权限模型查询角色-->
+		       <#if roleModel??>
+		             and role.chRoleModel like :roleModel 
+		       </#if>
+		       <#if orderattr??>
+	              order by  ${orderattr}  ${ordertype}
+	           <#else>
+	              order by role.id desc
+	           </#if>
+          ]]>
+       </hql>
+    </query>
+    
+    <!-- 获得角色获得其所有权限的数量 -->
+    <query name="system.getCountFuncNumByRoleId">
+       <hql>
+          <![CDATA[select count(roleFunc.id) from ChRolefunc as roleFunc where roleFunc.chRole.id=:roleId order by roleFunc.id asc]]>
+       </hql>
+    </query>
+    
+    <!-- 获得角色层级/根据上级角色获得所有下级直接角色的数量 -->
+    <query name="system.getCountSubChRoleNumByParentId">
+       <hql>
+          <![CDATA[select count(role.id) from ChRole as role where role.chRole.id=:parentId]]>
+       </hql>
+    </query>
+    
+    <!-- 获得角色对应的权限 -->
+     <query name="system.findRoleFuncs">
+       <hql>
+          <![CDATA[
+               select rf from ChRolefunc rf 
+               where 1=1 
+               <#--获得角色对应的权限-->
+               <#if roleId??>
+                   and rf.chRole.id=:roleId
+               </#if>
+               <#--权限路径-->
+               <#if funcPath??>
+                    and rf.chFunc.chFuncPath=:funcPath 
+               </#if>
+          ]]>
+       </hql>
+    </query>
+    
+    <!-- 查询权限 -->
+     <query name="system.findFuncs">
+       <hql>
+          <![CDATA[
+          select func from ChFunction as func 
+          where 1=1 
+          <#if funcName??>
+              and func.chFuncName=:funcName  
+          </#if>
+          <#if parentId??>
+              and func.chFunc.id=:parentId 
+          </#if>
+          <#--有三级菜单-->
+		  <#if existedParentId??>
+		      and func.chFunc.id is not null and func.chFunc.id!=:existedParentId 
+		  </#if>
+	          order by func.chFuncSortno asc 
+          ]]>
+       </hql>
+	</query>
+	
+	<query name="system.findFuncsBy">
+       <hql>
+          <![CDATA[
+          select func from ChFunction as func 
+          where 1=1 
+          <#if parentId??>
+              and func.chFunc.id=:parentId 
+          </#if>
+          <#--有三级菜单-->
+		  <#if existedParentId??>
+		      and func.chFunc.id is not null and func.chFunc.id!=:existedParentId 
+		  </#if>
+	          order by func.chFuncSortno asc  
+          ]]>
+       </hql>
+	</query>
+	
+	<!-- 查询系统规则设置 -->
+	<query name="system.findChRuleSettings">
+	    <hql>
+	    <![CDATA[
+             from ChRuleSetting where 1=1 
+             <#if ruleType??>
+                 and ruleType =:ruleType
+             </#if>
+        ]]>
+	    </hql>
+	</query>
+	  <!-- 用户登录日志 -->
+	 <query name="system.userLoginLog.findPage">
+        <hql>
+           <![CDATA[
+	          select log from UserLoginLog as log 
+	          where 1=1 
+	          <#if loginUserId??>
+	              and log.loginUser.id=:loginUserId 
+	          </#if> 
+	          <#if loginUserName??>
+	               and log.loginUser.userName like:loginUserName 
+	          </#if>
+	          <#if startLoginTime??>
+	                and log.loginTime>=:startLoginTime 
+	          </#if>
+	           <#if endLoginTime??>
+	                and log.loginTime<=:endLoginTime 
+	          </#if>
+	          <#if orderattr??>
+	                order by  ${orderattr} ${ordertype}
+	          <#else>
+	                order by log.createTime desc 
+	          </#if>
+	       ]]>
+        </hql>	 
+	 </query>
+
+    <!-- add by yueyongsheng 2013-07-12 -->
+	<!-- 查询权限范围 -->
+     <query name="system.findRanges">
+       <hql>
+          <![CDATA[
+		       select range from ChRange as range 
+		       where 1=1 
+		       <#--由角色ID查询权限范围-->
+		       <#if roleId??>
+		             and range.chRole.id=:roleId
+		       </#if>
+		        <#if chRangDesc??>
+		             and range.chRangDesc=:chRangDesc
+		       </#if>
+		       order by range.id asc
+          ]]>
+       </hql>
+    </query>
+  
+ 
+    <!-- 查询按钮信息 -->
+     <query name="system.findButtons">
+       <hql>
+          <![CDATA[
+		       select roleButton from ChRolebutton as roleButton 
+		       where 1=1 
+		       <#--由备份的数据库名查询备份-->
+		       <#if roleId??>
+		             and roleButton.chRole.id=:roleId 
+		       </#if>
+		       <#if funcId??>
+		             and roleButton.chFunc.id=:funcId 
+		       </#if>
+		       order by roleButton.id asc
+          ]]>
+       </hql>
+    </query>
+    
+   <query name="system.findButtonsByFuncId"> 
+      <hql>
+	     <![CDATA[
+	    select btn from ChButton as btn 
+	    where 1=1 
+	    <#--由备份的数据库名查询备份-->
+	    <#if funcId??>
+	          and btn.chFunc.id=:funcId 
+	    </#if>
+	    order by btn.id asc
+	     ]]>
+	   </hql>
+	</query>
+   
+        <!-- 查询日志信息 -->
+     <query name="system.chRecord.findPage">
+        <hql>
+           <![CDATA[
+	          select log from ChRecord as log 
+	          where 1=1 
+	          <#if chRecdModule??>
+	              and log.chRecdModule like :chRecdModule 
+	          </#if>
+	          <#if chRecdType??>
+	               and log.chRecdType like :chRecdType
+	          </#if>
+	          <#if startLoginTime??>
+	                and log.chRecdTime between :startLoginTime 
+	          </#if>
+	           <#if endLoginTime??>
+	                and :endLoginTime 
+	          </#if>
+	          <#if orderattr??>
+	                order by  ${orderattr} ${ordertype}
+	          <#else>
+	                order by log.chRecdTime desc 
+	          </#if>
+	       ]]>
+        </hql>	 
+	 </query>
+
+	<!-- 查询模型权限信息 -->
+     <query name="system.findFuncsByModel">
+        <hql>
+           <![CDATA[
+	          select modelFunc from ChModelfunc as modelFunc 
+	          where 1=1 
+	          <#if modelId??>
+	              and modelFunc.chModelId=:modelId 
+	          </#if>
+	          <#if funcId??>
+	              and modelFunc.chFuncId=:funcId 
+	          </#if>
+	       ]]>
+        </hql>	 
+	 </query>
+	 
+	 <!-- 查询权限信息 -->
+     <query name="system.findModels">
+        <hql>
+           <![CDATA[
+	          select model from ChModel as model 
+	          where 1=1 
+	          <#if modelId??>
+	              and model.id=:modelId 
+	          </#if>
+	          <#if modelName??>
+	              and model.chModlName like :modelName 
+	          </#if>
+	          order by model.id asc
+	       ]]>
+        </hql>	 
+	 </query>
+
+    <!-- 根据角色查询用户 -->
+	 <query name="system.findUserByRoleId">
+       <hql>
+          <![CDATA[
+               select user from ChUser as user 
+               where 1=1 
+		       <#if chUserRoleids??>
+		             and user.chUserRoleids like:chUserRoleids
+		       </#if>
+		       order by user.id asc
+          ]]>
+       </hql>
+    </query>
+    <!-- 根据角色、用户查询菜单 -->
+	 <query name="system.findUserFunc">
+       <hql>
+          <![CDATA[
+               select userFunc from ChUserfunc as userFunc 
+               where 1=1 
+		       <#if roleId??>
+		             and userFunc.chRole.id=:roleId
+		       </#if>
+		        <#if userId??>
+		             and userFunc.chUser.id=:userId
+		       </#if>
+		       order by userFunc.id asc
+          ]]>
+       </hql>
+    </query>
+    <!-- 根据菜单id，插入默认增删改查按钮 -->
+	 <query name="system.addDefaultButtonsByFuncId">
+       <hql>
+          <![CDATA[
+               insert into userFunc from ChUserfunc as userFunc 
+               where 1=1 
+		       <#if roleId??>
+		             and userFunc.chRole.id=:roleId
+		       </#if>
+		        <#if userId??>
+		             and userFunc.chUser.id=:userId
+		       </#if>
+		       order by userFunc.id asc
+          ]]>
+       </hql>
+    </query>
+</queryMapping>

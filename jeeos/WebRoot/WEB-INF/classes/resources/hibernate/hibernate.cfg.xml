@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+		<mapping class="com.changhong.system.entity.ChRuleSetting" />
+		<mapping class="com.changhong.system.entity.ChRole" />
+		<mapping class="com.changhong.system.entity.ChRolefunc" />
+		<mapping class="com.changhong.system.entity.ChRange" />
+		<mapping class="com.changhong.system.entity.ChFunction" />
+		<mapping class="com.changhong.system.entity.ChUser" />
+		<mapping class="com.changhong.system.entity.ChRecord" />
+		<mapping class="com.changhong.system.entity.ChRolebutton" />
+		<mapping class="com.changhong.system.entity.ChModel" />
+		<mapping class="com.changhong.system.entity.ChModelfunc" />
+		<mapping class="com.changhong.system.entity.ChButton" />
+		<mapping class="com.changhong.system.entity.ChUserfunc" />
+		
+	</session-factory>
+</hibernate-configuration>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="foodmanage" extends="default" namespace="/foodmanage">
+	    <!-- 未识别条码管理 -->
+	    <action name="foodno_*" class="foodmanage.action.FoodnoAction"
+	        method="{1}">
+	        <result name="list">/WEB-INF/jsp/foodmanage/foodno/listFoodno.jsp</result>
+	        <result name="update">/WEB-INF/jsp/foodmanage/foodno/foodnoDetail.jsp</result>
+	    </action>	
+	    
+	    <action name="goodsmanage_*" class="foodmanage.action.GoodsManageAction"
+			method="{1}">
+			<result name="list">/WEB-INF/jsp/foodmanage/goods/listGoods.jsp</result>
+		 	<result name="update">/WEB-INF/jsp/foodmanage/goods/goodsDetail.jsp</result>
+		 	<result name="add">/WEB-INF/jsp/foodmanage/goods/addGoods.jsp</result>
+		</action>
+	</package>
+</struts>

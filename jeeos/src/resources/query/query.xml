@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryFiles>
+	<query file="resources/query/include/system.query.xml" />
+</queryFiles>

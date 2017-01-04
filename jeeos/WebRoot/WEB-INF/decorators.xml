@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="">
+	<!-- 排除链接 -->
+	<excludes> 
+		<!--    <pattern>*.jsp</pattern> -->
+    </excludes> 
+	<!-- 默认装饰页面, 在需要装饰的页面增加<meta name="decorator" content="default"/> -->
+	<decorator name="default" page="/WEB-INF/jsp/decorator/default.jsp" >
+	</decorator>
+		
+</decorators>

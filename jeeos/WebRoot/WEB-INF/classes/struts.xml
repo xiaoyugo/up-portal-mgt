@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 后台 -->
+	<package name="default" extends="struts-default">
+		<interceptors>
+			<interceptor name="loginInterceptor"
+				class="com.changhong.base.web.struts2.interceptor.LoginInterceptorCh"></interceptor>
+			<interceptor name="actionAccessLogInterceptor"
+				class="com.changhong.base.web.struts2.interceptor.ActionAccessLogInterceptorCh"></interceptor>
+			<interceptor-stack name="chuserInterceptorStack">
+				<!-- extends paramsPrepareParamsStack -->
+				<interceptor-ref name="paramsPrepareParamsStack"></interceptor-ref>
+
+				<!-- customer interceptor stack -->
+				<interceptor-ref name="loginInterceptor"></interceptor-ref>
+				<interceptor-ref name="actionAccessLogInterceptor"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<!-- set chuserInterceptorStack to default -->
+		<default-interceptor-ref name="chuserInterceptorStack"></default-interceptor-ref>
+
+		<!-- 全局转发 -->
+		<global-results>
+			<result name="layout">/system/layout_layout.do</result>
+			<result name="login">/login.jsp</result>
+			<!-- 登录超时 -->
+			<result name="sessionTimeout">/sessionTimeout.jsp</result>
+			<!-- 访问权限 -->
+			<result name="noPermession">/noPermession.jsp</result>
+		</global-results>
+	</package>
+
+	<!--system -->
+	<include file="resources/struts/struts-system.xml" />
+	<!-- xapp -->
+	<include file="resources/struts/struts-xapp.xml" />	
+	<!-- waterclean -->
+	<include file="resources/struts/struts-waterclean.xml" />	
+	<!-- waterclean -->
+	<include file="resources/struts/struts-foodmanage.xml" />	
+</struts>

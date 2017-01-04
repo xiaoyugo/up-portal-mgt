@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="waterclean" extends="default" namespace="/waterclean">
+		<!-- 设备管理 -->
+		<action name="device_*" class="waterclean.action.DeviceAction"
+			method="{1}">
+			<result name="list">/WEB-INF/jsp/waterclean/device/listDevice.jsp</result>
+			<result name="user">/WEB-INF/jsp/waterclean/device/listUser.jsp</result>
+			<result name="agent">/WEB-INF/jsp/waterclean/device/listAgent.jsp</result>
+			<result name="devicesn">/WEB-INF/jsp/waterclean/device/deviceData.jsp</result>
+		</action>
+		<!-- 用户管理 -->
+		 <action name="user_*" class="waterclean.action.UserAction"
+			method="{1}">
+			<result name="list">/WEB-INF/jsp/waterclean/user/listUser.jsp</result>
+		</action> 
+		<!-- 数据管理 -->
+		 <action name="devicedata_*" class="waterclean.action.DevDataAction"
+			method="{1}">
+			<result name="list">/WEB-INF/jsp/waterclean/devicedata/listDeviceData.jsp</result>
+			<result name="fault">/WEB-INF/jsp/waterclean/devicedata/listFault.jsp</result>
+		</action>
+		<!-- 故障管理 -->
+		 <action name="fault_*" class="waterclean.action.FaultAction"
+			method="{1}">
+			<result name="list">/WEB-INF/jsp/waterclean/fault/listFault.jsp</result>
+			<result name="add">/WEB-INF/jsp/waterclean/fault/addFault.jsp</result>
+		</action> 
+
+        <!-- 代理商管理 -->
+		 <action name="agent_*" class="waterclean.action.AgentAction"
+			method="{1}">
+			<result name="list">/WEB-INF/jsp/waterclean/agent/listAgent.jsp</result>
+			<result name="add">/WEB-INF/jsp/waterclean/agent/addAgent.jsp</result>
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/accesslog.properties=UTF-8
+encoding//src/freemarker.properties=UTF-8
+encoding//src/log4j.properties=UTF-8
+encoding//src/messages_en_US.properties=UTF-8
+encoding//src/messages_zh_CN.properties=UTF-8
+encoding//src/resources/common/params.properties=UTF-8
+encoding//src/resources/datasource/datasource.properties=UTF-8
+encoding//src/struts.properties=UTF-8
+encoding/<project>=UTF-8

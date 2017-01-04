@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:aop="http://www.springframework.org/schema/aop" 
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans 
+							http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+							http://www.springframework.org/schema/tx 
+							http://www.springframework.org/schema/tx/spring-tx-3.2.xsd 
+							http://www.springframework.org/schema/aop 
+							http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+							http://www.springframework.org/schema/context 
+							http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+						default-lazy-init="true"> 
+	<context:property-placeholder location="classpath:resources/datasource/datasource.properties"/>
+	
+	<context:component-scan base-package="com.changhong" />
+	
+	<tx:annotation-driven/>
+	
+    <aop:aspectj-autoproxy/>
+	
+
+    <!-- spring mail
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="defaultEncoding" value="UTF-8" /> 
+    </bean>
+   -->
+    <!-- ehcache-->
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+       <property name="configLocation" value="classpath:${jdbc.ehcacheConfigFile}" /> 
+    </bean>
+
+    <!-- lob handler except oracel9-->
+    <bean id="lobHandler" lazy-init="true" class="org.springframework.jdbc.support.lob.DefaultLobHandler"/>
+   
+   
+   
+   <!-- BoneCP configuration -->
+	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+	   <property name="driverClass" value="${jdbc.driverClass}" />
+	   <property name="jdbcUrl" value="${jdbc.jdbcUrl}" />
+	   <property name="username" value="${jdbc.username}"/>
+	   <property name="password" value="${jdbc.password}"/>
+	   <property name="idleConnectionTestPeriod" value="${bonecp.idleConnectionTestPeriod}"/>
+	   <property name="idleMaxAge" value="${bonecp.idleMaxAge}"/>
+	   <property name="maxConnectionsPerPartition" value="${bonecp.maxConnectionsPerPartition}"/>
+	   <property name="minConnectionsPerPartition" value="${bonecp.minConnectionsPerPartition}"/>
+	   <property name="partitionCount" value="${bonecp.partitionCount}"/>
+	   <property name="acquireIncrement" value="${bonecp.acquireIncrement}"/>
+	   <property name="statementsCacheSize" value="${bonecp.statementsCacheSize}"/>
+	   <property name="releaseHelperThreads" value="${bonecp.releaseHelperThreads}"/>
+	</bean>  
+   
+	 
+	
+	<!-- C3P0 configuration 
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	   <property name="driverClass" value="${jdbc.driverClass}" />
+	   <property name="jdbcUrl" value="${jdbc.jdbcUrl}" />
+	   <property name="user" value="${jdbc.username}"/>
+	   <property name="password" value="${jdbc.password}"/>
+	   <property name="maxPoolSize" value="${c3p0.maxPoolSize}"/>
+	   <property name="minPoolSize" value="${c3p0.minPoolSize}"/>
+	   <property name="maxStatements" value="${c3p0.maxStatements}"/>
+	   <property name="InitialPoolSize" value="${c3p0.InitialPoolSize}"/>
+	   <property name="NumHelperThreads" value="${c3p0.NumHelperThreads}"/>
+	   <property name="MaxIdleTime" value="${c3p0.MaxIdleTime}"/>
+	   <property name="IdleConnectionTestPeriod" value="${c3p0.IdleConnectionTestPeriod}"/>
+	   <property name="AcquireIncrement" value="${c3p0.AcquireIncrement}"/>
+       <property name="AcquireRetryAttempts" value="${c3p0.AcquireRetryAttempts}"/>
+	   <property name="TestConnectionOnCheckin" value="${c3p0.TestConnectionOnCheckin}"/>
+       <property name="TestConnectionOnCheckout" value="${c3p0.TestConnectionOnCheckout}"/>
+	</bean>  -->
+	
+	<bean id="hibernateInterceptor" class="com.changhong.base.dao.hibernate.interceptor.HibernateInterceptor"></bean>
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="lobHandler" ref="lobHandler"></property>
+		<property name="configLocation" value="classpath:resources/hibernate/hibernate.cfg.xml"></property>
+		<property name="entityInterceptor">
+		    <ref bean="hibernateInterceptor"/>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+			    <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+			    <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+			    <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop> 
+			    <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+			    <prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+			    <prop key="hibernate.cache.provider_configuration_file_resource_path">${jdbc.ehcacheConfigFile}</prop>
+			    <!-- ehcache 是否命中 -->
+			    <prop key="hibernate.generate_statistics">true</prop>
+			    <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+</beans> 

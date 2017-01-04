@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- xapp 相关业务 -->
+	<package name="xapp" extends="struts-default" namespace="/xapp">
+		<action name="html5_*" class="xapp.action.Html5Action" method="{1}">
+			<result name="list">/WEB-INF/jsp/xapp/html5/list.jsp</result>
+			<result name="add">/WEB-INF/jsp/xapp/html5/add.jsp</result>
+			<!-- http接口请求超时 -->
+			<result name="error">/requestError.jsp</result>
+		</action>
+	
+	</package>
+	
+</struts>
